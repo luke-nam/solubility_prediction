@@ -1,15 +1,19 @@
-import joblib
-import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
-import base64
-from rdkit import Chem
-from rdkit.Chem import Descriptors, Draw
-from io import BytesIO
 import os
 
-model = joblib.load(os.path.join(os.path.dirname(__file__), "../ml_models/solubility_rf_model.joblib"))
-explainer = joblib.load(os.path.join(os.path.dirname(__file__), "../ml_models/explainer.pkl"))
+import joblib
+import pandas as pd
+from rdkit import Chem
+from rdkit.Chem import Descriptors
+
+model = joblib.load(
+    os.path.join(os.path.dirname(__file__), 
+    "../ml_models/solubility_rf_model.joblib")
+)
+explainer = joblib.load(
+    os.path.join(
+        os.path.dirname(__file__), 
+        "../ml_models/explainer.pkl")
+    )
 
 def compute_descriptors(smiles):
     mol = Chem.MolFromSmiles(smiles)
@@ -47,7 +51,11 @@ def compute_descriptors(smiles):
         "MolLogP",
     ]
 
-    descriptor_vals = {name: func(mol) for name, func in Descriptors.descList if name in descriptor_names}
+    descriptor_vals = {
+        name: func(mol) 
+        for name, func in Descriptors.descList 
+        if name in descriptor_names
+    }
     return pd.DataFrame([descriptor_vals])
 
 def predict_label(smiles):
@@ -87,7 +95,10 @@ def predict_shap(smiles, top_k=5):
     }
 
     if len(descriptors_df.columns) != len(shap_values_flat):
-        print(f"Error: Mismatch between descriptors ({len(descriptors_df.columns)}) and SHAP values ({len(shap_values_flat)}).")
+        print(
+            f"Error: Mismatch between descriptors ({len(descriptors_df.columns)}) "
+            f"and SHAP values ({len(shap_values_flat)})."
+        )
         return pd.DataFrame()
     
     shap_df = pd.DataFrame({
@@ -95,7 +106,11 @@ def predict_shap(smiles, top_k=5):
         "SHAP Value": shap_values_predicted_class,  # Ensure 1D array
         "Feature Value": descriptors_df.iloc[0].values
     })
-    shap_df["Feature"] = shap_df["Feature"].map(descriptor_labels).fillna(shap_df["Feature"])
+    shap_df["Feature"] = (
+        shap_df["Feature"]
+        .map(descriptor_labels)
+        .fillna(shap_df["Feature"])
+    )
     shap_df["Abs SHAP Value"] = shap_df["SHAP Value"].abs()
     shap_df = shap_df.sort_values(by="Abs SHAP Value", ascending=False).head(top_k)
     return shap_df

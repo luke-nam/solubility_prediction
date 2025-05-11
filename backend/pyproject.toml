@@ -1,0 +1,20 @@
+[project]
+name = "backend"
+version = "0.1.0"
+description = "Backend server for solubility prediction"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "fastapi[standard]>=0.115.12",
+    "joblib>=1.5.0",
+    "matplotlib>=3.10.3",
+    "pandas>=2.2.3",
+    "rdkit>=2025.3.1",
+    "seaborn>=0.13.2",
+]
+
+[tool.ruff]
+line-length = 88  # Match Black's default
+lint.select = ["E", "F", "I"]  # E = pycodestyle, F = pyflakes, I = isort
+lint.ignore = []
+exclude = ["venv", ".venv", "migrations"]
