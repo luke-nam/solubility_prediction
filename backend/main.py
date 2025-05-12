@@ -1,8 +1,9 @@
-from typing import Union
+from typing import Union, List
 
 from fastapi import FastAPI, HTTPException
 
 from app.schemas.prediction import PredictionRequest, ShapResponse, SolubilityResponse
+from app.services.predictor import predict_label, predict_probs, predict_shap
 
 app = FastAPI()
 
@@ -17,18 +18,20 @@ def root():
 
 @app.post(
     "/predict/{model_name}", 
-    response_model=Union[SolubilityResponse, ShapResponse]
+    response_model=Union[SolubilityResponse, List[ShapResponse]]
 )
-def predict(model_name: str, request: PredictionRequest) -> None: 
+def predict(model_name: str, request: PredictionRequest) -> Union[SolubilityResponse, List[ShapResponse]]: 
     if model_name not in model_registry:
         raise HTTPException(status_code=404, detail="Model not found")
 
     match model_name:
         case "solubility_model": 
-            #"Do something here"
-            return SolubilityResponse(prediction=1)
+            pred = predict_label(request.smiles)
+            probs = predict_probs(request.smiles)
+            return SolubilityResponse(prediction=pred, probabilities=probs)
+        
         case "shap_model": 
-            #"Do another thing here"
-            return ShapResponse(prediction=1) 
+            pred = predict_shap(request.smiles)
+            return [ShapResponse(**row) for row in pred] 
 
 

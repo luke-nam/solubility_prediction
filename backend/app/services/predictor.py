@@ -103,14 +103,14 @@ def predict_shap(smiles, top_k=5):
     
     shap_df = pd.DataFrame({
         "Feature": descriptors_df.columns,
-        "SHAP Value": shap_values_predicted_class,  # Ensure 1D array
-        "Feature Value": descriptors_df.iloc[0].values
+        "SHAP_Value": shap_values_predicted_class,  # Ensure 1D array
+        "Feature_Value": descriptors_df.iloc[0].values
     })
     shap_df["Feature"] = (
         shap_df["Feature"]
         .map(descriptor_labels)
         .fillna(shap_df["Feature"])
     )
-    shap_df["Abs SHAP Value"] = shap_df["SHAP Value"].abs()
-    shap_df = shap_df.sort_values(by="Abs SHAP Value", ascending=False).head(top_k)
-    return shap_df
+    shap_df["Abs_SHAP_Value"] = shap_df["SHAP_Value"].abs()
+    shap_df = shap_df.sort_values(by="Abs_SHAP_Value", ascending=False).head(top_k)
+    return shap_df.to_dict(orient="records")

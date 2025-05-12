@@ -2,10 +2,14 @@ from pydantic import BaseModel
 
 
 class PredictionRequest(BaseModel):
-    input: str
+    smiles: str
 
 class SolubilityResponse(BaseModel): 
-    prediction: int
+    prediction: str 
+    probabilities: list[float]
 
 class ShapResponse(BaseModel):
-    prediction: float 
+    Feature: str
+    SHAP_Value: float
+    Feature_Value: float
+    Abs_SHAP_Value: float

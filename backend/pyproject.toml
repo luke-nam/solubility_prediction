@@ -1,16 +1,16 @@
 [project]
-name = "backend"
+name = "solubility_predictor"
 version = "0.1.0"
-description = "Backend server for solubility prediction"
+description = "Solubility predictor"
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = ">=3.11"
 dependencies = [
     "fastapi[standard]>=0.115.12",
     "joblib>=1.5.0",
-    "matplotlib>=3.10.3",
     "pandas>=2.2.3",
     "rdkit>=2025.3.1",
-    "seaborn>=0.13.2",
+    "scikit-learn>=1.6.1",
+    "shap>=0.47.2",
 ]
 
 [tool.ruff]
