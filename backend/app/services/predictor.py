@@ -3,7 +3,7 @@ import os
 import joblib
 import pandas as pd
 from rdkit import Chem
-from rdkit.Chem import Descriptors
+from rdkit.Chem import Descriptors, Draw
 
 model = joblib.load(
     os.path.join(os.path.dirname(__file__), 
@@ -114,3 +114,8 @@ def predict_shap(smiles, top_k=5):
     shap_df["Abs_SHAP_Value"] = shap_df["SHAP_Value"].abs()
     shap_df = shap_df.sort_values(by="Abs_SHAP_Value", ascending=False).head(top_k)
     return shap_df.to_dict(orient="records")
+
+def display_structure(smiles, width=300, height=300):
+    mol = Chem.MolFromSmiles(smiles)
+    img = Draw.MolToImage(mol, (width, height))
+    return img

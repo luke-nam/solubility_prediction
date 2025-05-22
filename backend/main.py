@@ -1,11 +1,17 @@
 from typing import List, Union
+from io import BytesIO
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import StreamingResponse
 
 from app.schemas.prediction import PredictionRequest, ShapResponse, SolubilityResponse
-from app.services.predictor import predict_label, predict_probs, predict_shap
-
+from app.services.predictor import (
+    predict_label, 
+    predict_probs, 
+    predict_shap, 
+    display_structure
+)
 app = FastAPI()
 
 # Allow your frontend origin during development
@@ -30,6 +36,16 @@ model_registry = {
 @app.get("/")
 def root():
     return "Welcome to Solubility Predictor"
+
+@app.get("/structure")
+def get_structure(smiles: str) -> StreamingResponse: 
+    img = display_structure(smiles)    
+
+    buffer = BytesIO()
+    img.save(buffer, format="PNG")
+    buffer.seek(0)
+
+    return StreamingResponse(buffer, media_type="image/png")
 
 @app.post(
     "/predict/{model_name}", 
