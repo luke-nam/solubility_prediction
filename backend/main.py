@@ -1,5 +1,5 @@
-from typing import List, Union
 from io import BytesIO
+from typing import List, Union
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
@@ -7,11 +7,12 @@ from fastapi.responses import StreamingResponse
 
 from app.schemas.prediction import PredictionRequest, ShapResponse, SolubilityResponse
 from app.services.predictor import (
-    predict_label, 
-    predict_probs, 
-    predict_shap, 
-    display_structure
+    display_structure,
+    predict_label,
+    predict_probs,
+    predict_shap,
 )
+
 app = FastAPI()
 
 # Allow your frontend origin during development

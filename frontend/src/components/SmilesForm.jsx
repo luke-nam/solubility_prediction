@@ -1,21 +1,20 @@
 import { useState } from "react";
 
 export default function SmilesForm({ onSubmit }) {
-  const [smiles, setSmiles] = useState("");
+  const [input, setInput] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit(smiles);
+    onSubmit(input);
   };
 
   return (
     <form onSubmit={handleSubmit}>
-      <label htmlFor="smiles">SMILES:   </label>
       <input
         type="text"
-        id="smiles"
-        value={smiles}
-        onChange={(e) => setSmiles(e.target.value)}
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+        placeholder="Enter SMILES"
       />
       <button type="submit">Predict</button>
     </form>
