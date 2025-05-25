@@ -7,7 +7,6 @@ export default function ResultCard({ data, smiles }) {
   const predictionText = solubility.prediction;
   const max_prob = Math.max(...solubility.probabilities).toFixed(2);
 
-
   // Determine solubility category color based on prediction
   const categoryColor = predictionText === "Soluble" ? "#4caf50" : 
                        predictionText === "Slightly soluble" ? "#ffc107" : 
