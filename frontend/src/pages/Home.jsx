@@ -31,8 +31,10 @@ export default function Home() {
     <div className="home-container">
       <h1>Solubility Predictor</h1>
       <SmilesForm onSubmit={handlePredict} />
-      {result?.error && <ErrorMessage message={result.error} />}
-      {result && !result.error && <ResultCard data={result} smiles={smiles} />}
+      <div className="result-container">
+        {result?.error && <ErrorMessage message={result.error} />}
+        {result && !result.error && <ResultCard data={result} smiles={smiles} />}
+      </div>
     </div>
   );
 }

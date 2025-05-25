@@ -5,9 +5,13 @@ export default function ResultCard({ data, smiles }) {
   
   // Get prediction directly from the response
   const predictionText = solubility.prediction;
-  
+  const max_prob = Math.max(...solubility.probabilities).toFixed(2);
+
+
   // Determine solubility category color based on prediction
-  const categoryColor = predictionText === "Soluble" ? "#4caf50" : "#f44336";
+  const categoryColor = predictionText === "Soluble" ? "#4caf50" : 
+                       predictionText === "Slightly soluble" ? "#ffc107" : 
+                       "#f44336";
   
   // Sort SHAP values by absolute SHAP value
   const sortedFeatures = [...shap]
@@ -36,6 +40,8 @@ export default function ResultCard({ data, smiles }) {
             <div className="prediction-result">
               <div className="prediction-category" style={{ backgroundColor: categoryColor }}>
                 {predictionText}
+                <br />
+                Probability: {max_prob}
               </div>
             </div>
           </div>

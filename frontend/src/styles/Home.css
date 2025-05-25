@@ -1,18 +1,21 @@
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-x: hidden;
 }
 
 .home-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  max-width: 800px;
+  width: 400px;
   margin: 0 auto;
   padding: 2rem;
   background-color: #f9f9f9;
-  min-height: 10vh;
+  height: calc(100vh - 4rem);
 }
 
 .home-container h1 {
@@ -21,8 +24,7 @@
 }
 
 form {
-  width: 100%;
-  max-width: 600px;
+  width: 600px;
   display: flex;
   margin-bottom: 2rem;
   gap: 0.5rem;
@@ -31,11 +33,19 @@ form {
 }
 
 form input {
+  background-color: white;
   flex-grow: 1;
   padding: 0.75rem;
   border: 1px solid #ddd;
   border-radius: 4px;
   font-size: 1rem;
+  color: black;
+  outline: none;
+}
+
+form input:focus {
+  border-color: #4a6fa5;
+  box-shadow: 0 0 0 2px rgba(74, 111, 165, 0.2);
 }
 
 form button {
@@ -47,8 +57,28 @@ form button {
   cursor: pointer;
   font-weight: bold;
   transition: background-color 0.2s;
+  white-space: nowrap;
 }
 
 form button:hover {
   background-color: #3a5a85;
+}
+
+.result-container {
+  width: 100%;
+  flex-grow: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (max-width: 1440px) {
+  .home-container {
+    width: 95vw;
+  }
+  
+  form {
+    width: 100%;
+    max-width: 600px;
+  }
 }
