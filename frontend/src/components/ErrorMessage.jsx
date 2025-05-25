@@ -13,7 +13,9 @@ export default function ErrorMessage({ message }) {
         fontWeight: "medium",
         display: "flex",
         alignItems: "center",
+        justifyContent: "center",
         boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+        textAlign: "center"
       }}
     >
       <span style={{ marginRight: "0.5rem", fontSize: "1.2rem" }}>⚠️</span>
