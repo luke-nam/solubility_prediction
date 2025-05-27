@@ -1,0 +1,175 @@
+.result-card {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin: 0 auto;
+  overflow: hidden;
+  width: 75%;
+  display: flex;
+  flex-direction: column;
+  height: fit-content;
+}
+
+.card-header {
+  background-color: #4a6fa5;
+  color: white;
+  padding: 0.5rem 1.5rem;
+}
+
+.card-header h3 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.card-body {
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.results-grid {
+  display: flex;
+  gap: 1.5rem;
+  height: fit-content;
+}
+
+.left-column {
+  flex: 0 0 350px;
+  display: flex;
+  flex-direction: column;
+}
+
+.right-column {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.structure-container {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.molecule-image {
+  width: 100%;
+  max-width: 280px;
+  height: auto;
+  margin-bottom: 0.5rem;
+}
+
+.smiles-string {
+  font-size: 0.9rem;
+  word-break: break-all;
+  text-align: center;
+  margin-top: 0.25rem;
+  color: #555;
+}
+
+.prediction-result {
+  margin-top: 0.75rem;
+  display: flex;
+  justify-content: center;
+}
+
+.prediction-category {
+  padding: 0.5rem 2rem;
+  border-radius: 4px;
+  color: white;
+  font-weight: bold;
+  font-size: 1.2rem;
+  text-align: center;
+  min-width: 150px;
+}
+
+.feature-importance {
+  margin-top: 0.75rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.feature-importance h4 {
+  margin: 0 0 0.5rem 0;
+  color: #4a6fa5;
+  text-align: center;
+}
+
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 0.5rem;
+  height: 250px;
+  overflow-y: auto;
+}
+
+.shap-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  color: #333;
+  background-color: white;
+  border-radius: 6px;
+}
+
+.shap-table th {
+  background-color: #f2f7fc;
+  color: #4a6fa5;
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+  font-weight: 600;
+  border-bottom: 2px solid #e1e8f0;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.shap-table td {
+  padding: 0.4rem 0.75rem;
+  border-bottom: 1px solid #e1e8f0;
+  color: #333;
+}
+
+.shap-table .top-feature {
+  background-color: #f8fafb;
+}
+
+.shap-table .top-feature td {
+  font-weight: 500;
+}
+
+.shap-table .feature-name {
+  width: 40%;
+  color: #333;
+}
+
+.shap-table .shap-value {
+  width: 30%;
+  text-align: right;
+}
+
+.shap-table .feature-value {
+  width: 30%;
+  text-align: right;
+  color: #555;
+}
+
+@media (max-width: 900px) {
+  .results-grid {
+    flex-direction: column;
+  }
+  
+  .left-column {
+    width: 100%;
+    flex: none;
+  }
+  
+  .molecule-image {
+    max-width: 250px;
+  }
+} 
