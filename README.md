@@ -10,6 +10,7 @@ This project aims to:
 
 
 **Input:** Molecular SMILES string
+
 **Output:**
 - Predicted solubility class: `Soluble` (LogS < -4), `Slightly soluble` (-4 < LogS < -2), or `Insoluble` (LogS > -2)
 - Associated class probability
