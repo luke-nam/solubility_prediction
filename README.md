@@ -20,3 +20,7 @@ This project aims to:
 - `notebooks/`: Jupyter notebooks for data processing, modeling, and SHAP analysis
 - `backend/`: FastAPI backend to return model prediction results
 - `frontend/`: Web app frontend for SMILES input and model result access
+
+### Solubility App Preview 
+![Solubility App Preview](/resources/Input.png)
+![Solubility App Preview](/resources/Output.png)
