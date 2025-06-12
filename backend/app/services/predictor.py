@@ -1,6 +1,6 @@
 import os
-
 import joblib
+import numpy as np
 import pandas as pd
 from rdkit import Chem
 from rdkit.Chem import Descriptors, Draw
@@ -69,7 +69,7 @@ def predict_probs(smiles):
     prediction_probs = model.predict_proba(descriptors)[0]
     return prediction_probs.tolist()
 
-def predict_shap(smiles, top_k=5):
+## def predict_shap(smiles, top_k=5):
     descriptors_df = compute_descriptors(smiles)
     shap_values = explainer.shap_values(descriptors_df)
     predicted_class = model.predict(descriptors_df)[0]
@@ -113,6 +113,48 @@ def predict_shap(smiles, top_k=5):
     )
     shap_df["Abs_SHAP_Value"] = shap_df["SHAP_Value"].abs()
     shap_df = shap_df.sort_values(by="Abs_SHAP_Value", ascending=False).head(top_k)
+    return shap_df.to_dict(orient="records")
+
+def get_shap_influence(smiles, top_k=5):
+
+    descriptor_labels = {
+      "MolWt": "Molecular Weight",
+      "MolLogP": "LogP",
+      "TPSA": "Topological Polar Surface Area",
+      "qed": "QED (Drug-likeness)",
+      "FractionCSP3": "Fraction sp3 Carbons",
+      "NumHAcceptors": "H-Bond Acceptor Count",
+      "NumHDonors": "H-Bond Donor Count",
+      "RingCount": "Ring Count",
+      "FpDensityMorgan2": "Fragment Density",
+      "BalabanJ": "Molecular Complexity (BalabanJ)",
+      "MaxEStateIndex": "Max E-State Index",
+      "MinEStateIndex": "Min E-State Index",
+      "Phi": "Phi (Flexibility)",
+      "SPS": "Simple Polar Surface"
+    }
+
+    descriptors_df = compute_descriptors(smiles)
+    shap_values = explainer.shap_values(descriptors_df)
+    ordinal_weights = np.array([-1,0,1])
+    shap_matrix = shap_values[0]
+    influence_scores = np.dot(shap_matrix, ordinal_weights)
+
+    shap_df = pd.DataFrame({
+        "Feature": descriptors_df.columns,
+        "Influence": influence_scores,
+        "Feature_Value": descriptors_df.iloc[0].values
+    })
+    shap_df["Feature"] = shap_df["Feature"].map(descriptor_labels).fillna(shap_df["Feature"])
+    shap_df["Contribution"] = shap_df["Influence"].apply(
+        lambda x: "Favors higher solubility class" if x > 0 else "Favors lower solubility class"
+    )
+
+    shap_df["Abs_Influence"] = shap_df["Influence"].abs()
+    shap_df = shap_df.sort_values(by="Abs_Influence", ascending=False).head(top_k)
+
+    shap_df = shap_df[["Feature", "Feature_Value", "Influence", "Contribution"]]
+
     return shap_df.to_dict(orient="records")
 
 def display_structure(smiles, width=300, height=300):
