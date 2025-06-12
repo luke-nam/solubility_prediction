@@ -2,27 +2,26 @@
   background-color: white;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  margin: 0 auto;
+  margin: 0;
   overflow: hidden;
-  width: 75%;
+  width: 100%;
   display: flex;
   flex-direction: column;
-  height: fit-content;
 }
 
 .card-header {
   background-color: #4a6fa5;
   color: white;
-  padding: 0.5rem 1.5rem;
+  padding: 0.25rem 1rem;
 }
 
 .card-header h3 {
   margin: 0;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
 }
 
 .card-body {
-  padding: 0.75rem;
+  padding: 0.25rem;
   display: flex;
   flex-direction: column;
 }
@@ -30,26 +29,22 @@
 .results-grid {
   display: flex;
   gap: 1.5rem;
-  height: fit-content;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 0.25rem;
 }
 
-.left-column {
-  flex: 0 0 350px;
+.structure-section {
+  flex: 0 0 400px;
   display: flex;
   flex-direction: column;
-}
-
-.right-column {
-  flex: 1;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
+  gap: 0.25rem;
 }
 
 .structure-container {
   background-color: #f8f9fa;
   border-radius: 8px;
-  padding: 0.75rem;
+  padding: 0.25rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -59,31 +54,59 @@
   width: 100%;
   max-width: 280px;
   height: auto;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.25rem;
 }
 
 .smiles-string {
   font-size: 0.9rem;
   word-break: break-all;
   text-align: center;
-  margin-top: 0.25rem;
+  margin: 0;
   color: #555;
 }
 
 .prediction-result {
-  margin-top: 0.75rem;
+  margin: 0.25rem 0 0 0;
   display: flex;
   justify-content: center;
 }
 
 .prediction-category {
-  padding: 0.5rem 2rem;
+  padding: 0.25rem 1.5rem;
   border-radius: 4px;
   color: white;
   font-weight: bold;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   text-align: center;
   min-width: 150px;
+}
+
+.shap-section {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.shap-container {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 0.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  height: 400px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.shap-image {
+  display: block;
+  max-width: 100%;
+  max-height: 380px;
+  width: auto;
+  height: auto;
 }
 
 .feature-importance {
@@ -164,9 +187,13 @@
     flex-direction: column;
   }
   
-  .left-column {
+  .structure-section {
     width: 100%;
     flex: none;
+  }
+  
+  .shap-section {
+    width: 100%;
   }
   
   .molecule-image {

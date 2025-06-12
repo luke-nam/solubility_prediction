@@ -10,7 +10,8 @@ from app.services.predictor import (
     display_structure,
     predict_label,
     predict_probs,
-    predict_shap,
+    get_shap_influence,
+    display_shap_plot,
 )
 
 app = FastAPI()
@@ -48,6 +49,11 @@ def get_structure(smiles: str) -> StreamingResponse:
 
     return StreamingResponse(buffer, media_type="image/png")
 
+@app.get("/shap_plot")
+def get_shap_plot(smiles: str):
+    pred = get_shap_influence(smiles)
+    return display_shap_plot(pred)
+
 @app.post(
     "/predict/{model_name}", 
     response_model=Union[SolubilityResponse, List[ShapResponse]]
@@ -66,7 +72,7 @@ def predict(
             return SolubilityResponse(prediction=pred, probabilities=probs)
         
         case "shap_model": 
-            pred = predict_shap(request.smiles)
+            pred = get_shap_influence(request.smiles)
             return [ShapResponse(**row) for row in pred] 
 
 

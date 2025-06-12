@@ -22,5 +22,6 @@ This project aims to:
 - `frontend/`: Web app frontend for SMILES input and model result access
 
 ### Solubility App Preview 
-![Solubility App Preview](/resources/Input.png)
-![Solubility App Preview](/resources/Output.png)
+![Solubility App Input Preview](/resources/Input.png)
+![Solubility App Output_1 Preview](/resources/Output_1.png)
+![Solubility App Output_2 Preview](/resources/Output_2.png)

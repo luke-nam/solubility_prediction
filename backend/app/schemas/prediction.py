@@ -10,6 +10,6 @@ class SolubilityResponse(BaseModel):
 
 class ShapResponse(BaseModel):
     Feature: str
-    SHAP_Value: float
     Feature_Value: float
-    Abs_SHAP_Value: float
+    Influence: float
+    Contribution: str 

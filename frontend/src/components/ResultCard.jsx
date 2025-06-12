@@ -35,7 +35,6 @@ export default function ResultCard({ data, smiles }) {
                 <strong>SMILES:</strong> {smiles}
               </div>
             </div>
-            
             <div className="prediction-result">
               <div className="prediction-category" style={{ backgroundColor: categoryColor }}>
                 {predictionText}
@@ -44,32 +43,14 @@ export default function ResultCard({ data, smiles }) {
               </div>
             </div>
           </div>
-          
-          <div className="right-column">
-            <div className="feature-importance">
-              <h4>Feature Importance</h4>
-              <div className="table-container">
-                <table className="shap-table">
-                  <thead>
-                    <tr>
-                      <th>Feature</th>
-                      <th>SHAP Value</th>
-                      <th>Feature Value</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {sortedFeatures.map((feature, index) => (
-                      <tr key={index} className={index < 3 ? "top-feature" : ""}>
-                        <td className="feature-name">{feature.Feature}</td>
-                        <td className={`shap-value ${feature.SHAP_Value > 0 ? 'positive' : 'negative'}`}>
-                          {feature.SHAP_Value.toFixed(4)}
-                        </td>
-                        <td className="feature-value">{feature.Feature_Value.toFixed(2)}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+
+          <div className="shap-section">
+            <div className="shap-container">
+              <img
+                src={`http://localhost:8000/shap_plot?smiles=${encodeURIComponent(smiles)}`}
+                alt="SHAP plot"
+                className="shap-image"
+              />
             </div>
           </div>
         </div>
