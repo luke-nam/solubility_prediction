@@ -1,9 +1,18 @@
+import matplotlib
+matplotlib.use("Agg")
+
 import os
 import joblib
 import numpy as np
 import pandas as pd
 from rdkit import Chem
 from rdkit.Chem import Descriptors, Draw
+import matplotlib.pyplot as plt
+import seaborn as sns
+from fastapi.responses import StreamingResponse
+import io
+
+
 
 model = joblib.load(
     os.path.join(os.path.dirname(__file__), 
@@ -69,52 +78,6 @@ def predict_probs(smiles):
     prediction_probs = model.predict_proba(descriptors)[0]
     return prediction_probs.tolist()
 
-## def predict_shap(smiles, top_k=5):
-    descriptors_df = compute_descriptors(smiles)
-    shap_values = explainer.shap_values(descriptors_df)
-    predicted_class = model.predict(descriptors_df)[0]
-    shap_values_predicted_class = shap_values[0][:, predicted_class]
-
-    shap_values_flat = shap_values[0] if shap_values.ndim > 1 else shap_values
-
-    descriptor_labels = {
-        "MolWt": "Molecular Weight", 
-        "MolLogP": "LogP", 
-        "TPSA": "TPSA",
-        "qed": "QED",
-        "FractionCSP3": "Fraction sp3 Carbons",
-        "NumHAcceptors": "H-Bond Acceptor Count",
-        "NumHDonors": "H-Bond Donor Count",
-        "RingCount": "Ring Count",
-        "FpDensityMorgan2": "Fragment Density",
-        "BalabanJ": "Molecular Complexity (BalabanJ)",
-        "MaxEStateIndex": "Max E-State Index",
-        "MinEStateIndex": "Min E-State Index",
-        "Phi": "Phi (Flexibility)",
-        "SPS": "Simple Polar Surface"
-    }
-
-    if len(descriptors_df.columns) != len(shap_values_flat):
-        print(
-            f"Error: Mismatch between descriptors ({len(descriptors_df.columns)}) "
-            f"and SHAP values ({len(shap_values_flat)})."
-        )
-        return pd.DataFrame()
-    
-    shap_df = pd.DataFrame({
-        "Feature": descriptors_df.columns,
-        "SHAP_Value": shap_values_predicted_class,  # Ensure 1D array
-        "Feature_Value": descriptors_df.iloc[0].values
-    })
-    shap_df["Feature"] = (
-        shap_df["Feature"]
-        .map(descriptor_labels)
-        .fillna(shap_df["Feature"])
-    )
-    shap_df["Abs_SHAP_Value"] = shap_df["SHAP_Value"].abs()
-    shap_df = shap_df.sort_values(by="Abs_SHAP_Value", ascending=False).head(top_k)
-    return shap_df.to_dict(orient="records")
-
 def get_shap_influence(smiles, top_k=5):
 
     descriptor_labels = {
@@ -161,3 +124,38 @@ def display_structure(smiles, width=300, height=300):
     mol = Chem.MolFromSmiles(smiles)
     img = Draw.MolToImage(mol, (width, height))
     return img
+
+def display_shap_plot(shap_vals, top_k=5):
+    # Limit to top_k features by absolute contribution
+    if isinstance(shap_vals, list):
+        shap_vals = pd.DataFrame(shap_vals)
+
+    shap_vals = shap_vals.sort_values(by="Influence", ascending=False).head(top_k)
+
+    # Create figure and axis
+    fig, ax = plt.subplots(figsize=(8, 6))
+
+    sns.barplot(
+        ax=ax,
+        y=[f"{feat} ({val:.2f})" for feat, val in zip(shap_vals["Feature"], shap_vals["Feature_Value"])],
+        x=shap_vals["Influence"],
+        hue=shap_vals["Contribution"],
+        palette={
+            "Favors lower solubility class": "#E74C3C",
+            "Favors higher solubility class": "#2ECC71"
+        },
+        dodge=False
+    )
+
+    ax.set_title(f"Top {top_k} SHAP Feature Contributions to Predicted Solubility")
+    ax.set_xlabel("Directional Influence on Solubility Prediction")
+    ax.set_ylabel("Descriptor (Value)")
+    ax.axvline(0, color="black", linewidth=0.8)
+    plt.tight_layout()
+
+    # Return image as streaming response
+    buf = io.BytesIO()
+    plt.savefig(buf, format="png", bbox_inches="tight")
+    plt.close(fig)
+    buf.seek(0)
+    return StreamingResponse(buf, media_type="image/png")
